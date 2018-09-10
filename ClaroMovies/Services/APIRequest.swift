@@ -28,6 +28,8 @@ extension APIRequest {
             URLQueryItem(name: String($0), value: String($1))
         }
         
+        components.queryItems?.append(URLQueryItem(name: "api_key", value: APIClient.apiKey))
+        
         guard let url = components.url else {
             fatalError("Could not get url")
         }

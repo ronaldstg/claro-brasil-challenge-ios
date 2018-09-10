@@ -27,13 +27,37 @@ class HomeViewController: UIViewController {
         navigationItem.title = "Claro Movies"
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        bindUI()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
     }
-
-
+    
+    private func bindUI() {
+        
+        let apiClient = APIClient()
+        
+        searchController.searchBar.rx.text.asObservable()
+            .map { ($0 ?? "").lowercased() }
+            .map { PopularMoviesRequest(name: $0) }
+            .flatMap { request -> Observable<[Movie]> in
+                return apiClient.getMovie(apiRequest: request)
+            }
+            .bind(to: collectionView.rx.items(cellIdentifier: cellIdentifier, cellType: MoviesCollectionViewCell.self)) { index, model, cell in
+                
+                if let posterPath = model.posterPath {
+                    
+                    let url = URL(string: APIClient.posterBaseUrl + posterPath)
+                    let data = try? Data(contentsOf: url!)
+                    
+                    cell.movieImageView.image = UIImage(data: data!)
+                }
+            }
+            .disposed(by: disposeBag)
+    
+    }
 }
 
