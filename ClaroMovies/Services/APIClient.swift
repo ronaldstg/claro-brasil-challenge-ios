@@ -10,13 +10,25 @@ import Foundation
 import RxSwift
 
 class APIClient {
-    //    private let baseURL = URL(string: "http://universities.hipolabs.com/")!
-    private let baseURL = URL(string: "https://api.themoviedb.org/3/movie/")!
-    //    private let baseURL = URL(string: "http://localhost:8080/movie/")!
+    private let baseURL = URL(string: "https://api.themoviedb.org/3/")!
     
-    /// poster base URL
+    static var apiKey: String{
+        return "530dea27c211e00f4c65c5a45907e773"
+    }
+    
+    // poster base URL
     static var posterBaseUrl: String {
         return "https://image.tmdb.org/t/p/w500"
+    }
+    
+    // movies search path
+    static var movieSearchPath: String {
+        return "search/movie"
+    }
+    
+    // popular movies path
+    static var popularMoviesPath: String {
+        return "movie/popular"
     }
     
     func send<T: Codable>(apiRequest: APIRequest) -> Observable<T> {
@@ -38,7 +50,6 @@ class APIClient {
             }
         }
     }
-    
     
     func getMovie(apiRequest:APIRequest) -> Observable<[Movie]> {
         return Observable<[Movie]>.create { [unowned self] observer in

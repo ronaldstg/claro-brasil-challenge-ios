@@ -9,8 +9,8 @@
 import Foundation
 
 struct Movie: Codable {
-    let title: String
-    let posterPath: String
+    let title: String?
+    let posterPath: String?
     
     private enum CodingKeys: String, CodingKey {
         case title
