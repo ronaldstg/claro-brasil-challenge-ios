@@ -56,9 +56,7 @@ class APIClient {
             let request = apiRequest.request(with: self.baseURL)
             let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
                 do {
-                    let movieList: MovieList = try JSONDecoder().decode(MovieList.self, from: data ?? Data())
-                    print("OK")
-                    
+                    let movieList: MovieList = try JSONDecoder().decode(MovieList.self, from: data ?? Data())                    
                     let model: [Movie] = movieList.results
                     observer.onNext(model)
                 } catch let error {

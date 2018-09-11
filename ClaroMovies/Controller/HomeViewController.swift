@@ -11,11 +11,13 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     let disposeBag = DisposeBag()
     let cellIdentifier = "moviecell"
+    let homeViewModel = HomeViewModel()
+    
     private let searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.placeholder = "Search for movies"
@@ -29,7 +31,7 @@ class HomeViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        bindUI()
+        bindUI(viewModel: homeViewModel)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,16 +39,18 @@ class HomeViewController: UIViewController {
         
     }
     
-    private func bindUI() {
+    private func bindUI(viewModel: HomeViewModel) {
         
-        let apiClient = APIClient()
+        self.searchController.searchBar
+            .rx
+            .text
+            .orEmpty
+            .asObservable()
+            .bind(to: viewModel.movieName)
+            .disposed(by: disposeBag)
         
-        searchController.searchBar.rx.text.asObservable()
-            .map { ($0 ?? "").lowercased() }
-            .map { PopularMoviesRequest(name: $0) }
-            .flatMap { request -> Observable<[Movie]> in
-                return apiClient.getMovie(apiRequest: request)
-            }
+        
+        viewModel.moviesList.asObservable()
             .bind(to: collectionView.rx.items(cellIdentifier: cellIdentifier, cellType: MoviesCollectionViewCell.self)) { index, model, cell in
                 
                 if let posterPath = model.posterPath {
