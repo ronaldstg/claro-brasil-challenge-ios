@@ -31,7 +31,9 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        collectionView.delegate = self
         bindUI(viewModel: homeViewModel)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -41,14 +43,14 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
     
     private func bindUI(viewModel: HomeViewModel) {
         
-        self.searchController.searchBar
+        let observable = self.searchController.searchBar
             .rx
             .text
             .orEmpty
+            .throttle(0.2, scheduler: MainScheduler.instance)
             .asObservable()
-            .bind(to: viewModel.movieName)
-            .disposed(by: disposeBag)
-        
+
+        viewModel.bindObservableToFetchMovies(observable)
         
         viewModel.moviesList.asObservable()
             .bind(to: collectionView.rx.items(cellIdentifier: cellIdentifier, cellType: MoviesCollectionViewCell.self)) { index, model, cell in
@@ -63,7 +65,25 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
                 }
             }
             .disposed(by: disposeBag)
+
+//            viewModel.isLoadingVariable.asObservable()
+//                .bind { _ in
+//
+//                }
+//                .disposed(by: disposeBag)
+        
+    }
     
+    func loadingView() {
+        
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
+        if (bottomEdge + 100 >= scrollView.contentSize.height) {
+            print("LOAD MORE")
+            homeViewModel.loadMoreMovies()
+        }
     }
 }
 
