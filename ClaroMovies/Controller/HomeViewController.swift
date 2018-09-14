@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 class HomeViewController: UIViewController {
     
@@ -51,9 +52,10 @@ class HomeViewController: UIViewController {
                 if let posterPath = model.posterPath {
                     
                     let url = URL(string: APIClient.posterBaseUrl + posterPath)
-                    let data = try? Data(contentsOf: url!)
+                    cell.movieImageView.kf.indicatorType = .activity
+                    cell.movieImageView.kf.setImage(with: url, options: [.transition(.fade(0.2))])
                     
-                    cell.movieImageView.image = UIImage(data: data!)
+                    
                 }
             }
             .disposed(by: disposeBag)
