@@ -8,6 +8,7 @@ target 'ClaroMovies' do
   # Pods for ClaroMovies
   pod 'RxSwift',    '~> 4.0'
   pod 'RxCocoa',    '~> 4.0'
+  pod 'Kingfisher'
 
   target 'ClaroMoviesTests' do
     inherit! :search_paths
