@@ -22,6 +22,8 @@
 		48F1BD0C2146B41900074D85 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1BD0B2146B41800074D85 /* Movie.swift */; };
 		48F1BD0E2146BA8900074D85 /* MovieList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1BD0D2146BA8900074D85 /* MovieList.swift */; };
 		48F1BD162146F3BB00074D85 /* MoviesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1BD152146F3BB00074D85 /* MoviesCollectionViewCell.swift */; };
+		48F1BD1A21471F3700074D85 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1BD1921471F3700074D85 /* HomeViewModel.swift */; };
+		48F1BD1C214847BF00074D85 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48F1BD1B214847BF00074D85 /* UIViewController+Extensions.swift */; };
 		9F2C43DE95A5BA9DC3D850AC /* Pods_ClaroMovies.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A0CF52ACB98D79F5BB6DD1E8 /* Pods_ClaroMovies.framework */; };
 		F75E1B58A92A2BC17E7A4B34 /* Pods_ClaroMoviesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89B9244CDEB00F3F3D5AA904 /* Pods_ClaroMoviesTests.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +71,8 @@
 		48F1BD112146F01A00074D85 /* DIN-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DIN-Light.ttf"; sourceTree = "<group>"; };
 		48F1BD122146F01A00074D85 /* DIN-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "DIN-Bold.ttf"; sourceTree = "<group>"; };
 		48F1BD152146F3BB00074D85 /* MoviesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesCollectionViewCell.swift; sourceTree = "<group>"; };
+		48F1BD1921471F3700074D85 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		48F1BD1B214847BF00074D85 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		5106E87933866075BDC50BEF /* Pods_ClaroMoviesUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClaroMoviesUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		89B9244CDEB00F3F3D5AA904 /* Pods_ClaroMoviesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClaroMoviesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0CF52ACB98D79F5BB6DD1E8 /* Pods_ClaroMovies.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ClaroMovies.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,6 +192,7 @@
 			children = (
 				48F1BD0B2146B41800074D85 /* Movie.swift */,
 				48F1BD0D2146BA8900074D85 /* MovieList.swift */,
+				48F1BD1921471F3700074D85 /* HomeViewModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -208,6 +213,7 @@
 			children = (
 				48F1BD0F2146F00300074D85 /* Fonts */,
 				48F1BD152146F3BB00074D85 /* MoviesCollectionViewCell.swift */,
+				48F1BD1B214847BF00074D85 /* UIViewController+Extensions.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -449,12 +455,14 @@
 				48F1BD162146F3BB00074D85 /* MoviesCollectionViewCell.swift in Sources */,
 				48F1BD0C2146B41900074D85 /* Movie.swift in Sources */,
 				48F1BD0A213F63F000074D85 /* SearchMoviesRequest.swift in Sources */,
+				48F1BD1A21471F3700074D85 /* HomeViewModel.swift in Sources */,
 				48F1BCD4213F4F2400074D85 /* HomeViewController.swift in Sources */,
 				48F1BD08213F63D500074D85 /* PopularMoviesRequest.swift in Sources */,
 				48F1BCD2213F4F2400074D85 /* AppDelegate.swift in Sources */,
 				48F1BD06213F638700074D85 /* APIRequest.swift in Sources */,
 				48F1BD0E2146BA8900074D85 /* MovieList.swift in Sources */,
 				48F1BD04213F637900074D85 /* APIClient.swift in Sources */,
+				48F1BD1C214847BF00074D85 /* UIViewController+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -629,6 +637,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JS79K272B5;
 				INFOPLIST_FILE = ClaroMovies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -647,6 +656,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = JS79K272B5;
 				INFOPLIST_FILE = ClaroMovies/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

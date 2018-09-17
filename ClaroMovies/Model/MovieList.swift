@@ -7,7 +7,7 @@
 //
 
 struct MovieList: Codable {
-    let results: [Movie]
+    let results: [Movie]?
     
     private enum CodingKeys: String, CodingKey {
         case results
