@@ -9,13 +9,14 @@
 import Foundation
 import RxSwift
 
-struct HomeViewModel {
+class HomeViewModel {
     
     let disposeBag = DisposeBag()
-    let movieName = BehaviorSubject(value: "")
+    let movieName = Variable<String>("")
     var moviesList = Variable<[Movie]>([])
-    var isLoadingVariable = Variable(true)
+    var isLoadingVariable = Variable(false)
     let apiClient = APIClient()
+    var pageIndex = Variable<Int>(1)
     
     init() {
 
@@ -29,22 +30,58 @@ struct HomeViewModel {
         
         observable
             .map { ($0 ).lowercased() }
-            .map { PopularMoviesRequest(name: $0) }
+            .map {
+                self.pageIndex.value = 1
+                return PopularMoviesRequest(name: $0, page: 1)
+            }
             .flatMap { request -> Observable<[Movie]> in
                 return self.apiClient.getMovie(apiRequest: request)
             }
             .bind(to: self.moviesList)
             .disposed(by: disposeBag)
         
-       
-//        self.moviesList.asObservable()
-//            .bind { movie in
-//                self.isLoadingVariable.value = movie.isEmpty
-//        }
+        
+        
+        // Setting searched keyword to movieName
+        observable
+            .map { ($0 ).lowercased() }
+            .bind(to: self.movieName)
+            .disposed(by: disposeBag)
     }
     
     func loadMoreMovies() {
-        self.moviesList.value.append(Movie(title: "TESTE", posterPath: "/IfB9hy4JH1eH6HEfIgIGORXi5h.jpg"))
+        
+        self.pageIndex.value += 1
+        self.isLoadingVariable.value = true
+        
+        let request = PopularMoviesRequest(name: self.movieName.value, page: self.pageIndex.value)
+        
+        let result:Observable<[Movie]>
+        result = self.apiClient.getMovie(apiRequest: request)
+        
+        result.asObservable()
+            .subscribe(onNext: {
+                self.moviesList.value.append(contentsOf: $0)
+            }, onError: { (error) in
+                print("an error occurred \(error.localizedDescription)")
+            }, onCompleted: {
+                self.isLoadingVariable.value = false //telling that finished
+            })
+            .disposed(by: disposeBag)
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

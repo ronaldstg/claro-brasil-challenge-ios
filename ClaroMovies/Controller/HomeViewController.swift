@@ -11,12 +11,18 @@ import RxSwift
 import RxCocoa
 import Kingfisher
 
-class HomeViewController: UIViewController, UICollectionViewDelegate {
+class HomeViewController: UIViewController, UICollectionViewDelegate,UISearchBarDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     let disposeBag = DisposeBag()
     let cellIdentifier = "moviecell"
     let homeViewModel = HomeViewModel()
+    var searchActive: Bool = false
+    var searchTerm:String!
+    
+    @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var headerContainerView: UIView!
+    @IBOutlet weak var headerContainerHeightConstraint: NSLayoutConstraint!
     
     private let searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -31,6 +37,8 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         navigationItem.hidesSearchBarWhenScrolling = false
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        searchController.searchBar.delegate = self
+        
         collectionView.delegate = self
         bindUI(viewModel: homeViewModel)
         
@@ -41,47 +49,53 @@ class HomeViewController: UIViewController, UICollectionViewDelegate {
         
     }
     
+    // MARK: RX BINDING
     private func bindUI(viewModel: HomeViewModel) {
         
         let observable = self.searchController.searchBar
             .rx
             .text
             .orEmpty
-            .throttle(0.2, scheduler: MainScheduler.instance)
+            .throttle(0.3, scheduler: MainScheduler.instance)
             .asObservable()
 
         viewModel.bindObservableToFetchMovies(observable)
         
         viewModel.moviesList.asObservable()
             .bind(to: collectionView.rx.items(cellIdentifier: cellIdentifier, cellType: MoviesCollectionViewCell.self)) { index, model, cell in
-                
+
                 if let posterPath = model.posterPath {
-                    
+
                     let url = URL(string: APIClient.posterBaseUrl + posterPath)
                     cell.movieImageView.kf.indicatorType = .activity
                     cell.movieImageView.kf.setImage(with: url, options: [.transition(.fade(0.2))])
-                    
-                    
+
                 }
             }
             .disposed(by: disposeBag)
+    }
 
-//            viewModel.isLoadingVariable.asObservable()
-//                .bind { _ in
-//
-//                }
-//                .disposed(by: disposeBag)
-        
+    // MARK: DELEGATE METHODS
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchActive = true
+        headerContainerView.isHidden = true
+        headerContainerHeightConstraint.constant = 0
     }
     
-    func loadingView() {
-        
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchBar.text = searchTerm
+        headerLabel.text = "Resultados para: \(searchTerm!)"
+        headerContainerView.isHidden = false
+        headerContainerHeightConstraint.constant = 60
     }
-
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTerm = searchBar.text
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let bottomEdge = scrollView.contentOffset.y + scrollView.frame.size.height;
-        if (bottomEdge + 100 >= scrollView.contentSize.height) {
-            print("LOAD MORE")
+        if (bottomEdge + 20 >= scrollView.contentSize.height) {
             homeViewModel.loadMoreMovies()
         }
     }
